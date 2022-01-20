@@ -2,12 +2,9 @@
 #define YYSTYPE int
 }
 %option noyywrap
-%x STRING
+%x  initString
 %%
-\n             {BEGIN INITIAL;}
-"for"             {printf("For-loop\n");}
-[^"]*           { printf("OTHER: %s\n",yytext);}    /* Any character */
-["]             {BEGIN STRING;}
-<STRING>["]      {BEGIN INITIAL;}
-<STRING>[^"]*   {printf("STRING: %s\n", yytext);}
+["].*["]        {printf("This is a string: %s\n", yytext);}
+"for"           {printf("FOR loop");}
+"if"            {printf("IF statement");}
 %%
