@@ -1,0 +1,1 @@
+# kompilatorLabb1
