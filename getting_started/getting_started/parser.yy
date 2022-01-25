@@ -17,7 +17,14 @@
   
 }
 // definition of set of tokens. All tokens are of type string
-%token <std::string> PLUSOP MINUSOP MULTOP INT LP RP 
+%token <std::string> PLUSOP MINUSOP MULTOP MINUS
+%token <std::string> LP RP LBRACE RBRACE LBRACKET RBRACKET 
+%token <std::string> STRING BOOLEAN IDENTIFIER ASSIGN NEW THIS LENGTH INT
+%token <std::string> STRINGVAL INTEGER TRUE FALSE
+%token <std::string> FOR IF ELSE WHILE
+%token <std::string> AND LESSER EQUAL NOT 
+%token <std::string> MAIN EXTENDS PUBLIC VOID RETURN CLASS SOP
+%token <std::string> DOT COMMA SEMI_C
 %token END 0 "end of file"
 
 // definition of the production rules. All production rules are of type Node

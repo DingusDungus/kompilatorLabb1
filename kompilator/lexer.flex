@@ -6,50 +6,50 @@
 %option noyywrap nounput batch noinput stack
 %%
 
-"+"                             {return yy::parser::make_PLUSOP(yytext);}
-"-"                             {return yy::parser::make_MINUS(yytext);}
-"*"                             {return yy::parser::make_MULTOP(yytext);}
-"="                             {return yy::parser::make_ASSIGN(yytext);}
-"=="                            {return yy::parser::make_EQUAL(yytext);}
-"!"                             {return yy::parser::make_NOT(yytext);}
-"<"                             {return yy::parser::make_LESSER(yytext);}
-"&&"                            {return yy::parser::make_AND(yytext);}
-"."                             {return yy::parser::make_DOT(yytext);}
-","                             {return yy::parser::make_COMMA(yytext);}
-";"                             {return yy::parser::make_SEMI_C(yytext);}
-"("                             {return yy::parser::make_LP(yytext);}
-")"                             {return yy::parser::make_RP(yytext);}
-"["                             {return yy::parser::make_LBRACKET(yytext);}
-"]"                             {return yy::parser::make_RBRACKET(yytext);}
-"{"                             {return yy::parser::make_LBRACE(yytext);}
-"}"                             {return yy::parser::make_RBRACE(yytext);}
-"for"                           {return yy::parser::make_FOR(yytext);}
-"if"                            {return yy::parser::make_IF(yytext);}    
-"else"                          {return yy::parser::make_ELSE(yytext);}
-"while"                         {return yy::parser::make_WHILE(yytext);}
-"main"                          {return yy::parser::make_MAIN(yytext);}
-"extends"                       {return yy::parser::make_EXTENDS(yytext);}
-"public"                        {return yy::parser::make_PUBLIC(yytext);}
-"void"                          {return yy::parser::make_VOID(yytext);}  
-"class"                         {return yy::parser::make_CLASS(yytext);}  
-"return"                        {return yy::parser::make_RETURN(yytext);}
-"String"                        {return yy::parser::make_STRING(yytext);}
-"boolean"                       {return yy::parser::make_BOOLEAN(yytext);}
-"true"                          {return yy::parser::make_TRUE(yytext);}
-"false"                         {return yy::parser::make_FALSE(yytext);}
-"int"                           {return yy::parser::make_INT(yytext);}
-"this"                          {return yy::parser::make_THIS(yytext);}
-"new"                           {return yy::parser::make_NEW(yytext);}
-"length"                        {return yy::parser::make_LENGTH(yytext);}
-"System.out.println"            {return yy::parser::make_SOP(yytext);}
-[a-zA-Z_][a-zA-Z0-9_]*          {return yy::parser::make_IDENTIFIER(yytext);}
+"+"                             {printf("AddOp\n"); return yy::parser::make_PLUSOP(yytext);}
+"-"                             {printf("MinusOp\n"); return yy::parser::make_MINUS(yytext);}
+"*"                             {printf("MultOp\n"); return yy::parser::make_MULTOP(yytext);}
+"="                             {printf("AssignOp\n"); return yy::parser::make_ASSIGN(yytext);}
+"=="                            {printf("EqualOp\n"); return yy::parser::make_EQUAL(yytext);}
+"!"                             {printf("NotOp\n"); return yy::parser::make_NOT(yytext);}
+"<"                             {printf("LesserOp\n"); return yy::parser::make_LESSER(yytext);}
+"&&"                            {printf("AndOp\n"); return yy::parser::make_AND(yytext);}
+"."                             {printf("Dot\n"); return yy::parser::make_DOT(yytext);}
+","                             {printf("Comma\n"); return yy::parser::make_COMMA(yytext);}
+";"                             {printf("Semi_Colon\n"); return yy::parser::make_SEMI_C(yytext);}
+"("                             {printf("LeftParan\n"); return yy::parser::make_LP(yytext);}
+")"                             {printf("RightParan\n"); return yy::parser::make_RP(yytext);}
+"["                             {printf("LeftBracket\n"); return yy::parser::make_LBRACKET(yytext);}
+"]"                             {printf("RightBracket\n"); return yy::parser::make_RBRACKET(yytext);}
+"{"                             {printf("leftBrace\n"); return yy::parser::make_LBRACE(yytext);}
+"}"                             {printf("RightBrace\n"); return yy::parser::make_RBRACE(yytext);}
+"for"                           {printf("ForOp\n"); return yy::parser::make_FOR(yytext);}
+"if"                            {printf("ifOp\n"); return yy::parser::make_IF(yytext);}    
+"else"                          {printf("ElseOp\n"); return yy::parser::make_ELSE(yytext);}
+"while"                         {printf("WhileOp\n"); return yy::parser::make_WHILE(yytext);}
+"main"                          {printf("Main\n"); return yy::parser::make_MAIN(yytext);}
+"extends"                       {printf("Extends\n"); return yy::parser::make_EXTENDS(yytext);}
+"public"                        {printf("public\n"); return yy::parser::make_PUBLIC(yytext);}
+"void"                          {printf("Void\n"); return yy::parser::make_VOID(yytext);}  
+"class"                         {printf("class\n"); return yy::parser::make_CLASS(yytext);}  
+"return"                        {printf("return\n"); return yy::parser::make_RETURN(yytext);}
+"String"                        {printf("String\n"); return yy::parser::make_STRING(yytext);}
+"boolean"                       {printf("Boolean\n"); return yy::parser::make_BOOLEAN(yytext);}
+"true"                          {printf("True\n"); return yy::parser::make_TRUE(yytext);}
+"false"                         {printf("False\n"); return yy::parser::make_FALSE(yytext);}
+"int"                           {printf("Int\n"); return yy::parser::make_INT(yytext);}
+"this"                          {printf("This\n"); return yy::parser::make_THIS(yytext);}
+"new"                           {printf("New\n"); return yy::parser::make_NEW(yytext);}
+"length"                        {printf("Length\n"); return yy::parser::make_LENGTH(yytext);}
+"System.out.println"            {printf("SOP\n"); return yy::parser::make_SOP(yytext);}
+[a-zA-Z_][a-zA-Z0-9_]*          {printf("identifier: %s\n", yytext); return yy::parser::make_IDENTIFIER(yytext);}
 
-0|[+|-]?[1-9][0-9]*             {return yy::parser::make_INTEGER(yytext);}
-["].*["]                        {return yy::parser::make_STRINGVAL(yytext);}
+0|[+|-]?[1-9][0-9]*             {printf("Integer: %s\n", yytext); return yy::parser::make_INTEGER(yytext);}
+["].*["]                        {printf("Stringval: %s\n", yytext); return yy::parser::make_STRINGVAL(yytext);}
 
-"//" [^\n\r]*\n|\r|\r\n        {}
-"/*" ([^*] | "*" [^/])* "*/"             {}
-[ \t\n]+                  {}
+"/""/"[^\n\r]*[\n]              {printf("Comment\n"); }
+"/""*"[^\n\r]*"*""/"            {printf("Comment\n"); }
+[ \t\n]+                        {printf("Whitespace\n"); }
 
 <<EOF>>                 return yy::parser::make_END();
 %%
