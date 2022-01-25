@@ -5,6 +5,6 @@
 %x  initString
 %%
 ["].*["]        {printf("This is a string: %s\n", yytext);}
-"for"           {printf("FOR loop");}
-"if"            {printf("IF statement");}
+"for"           {printf("FOR loop\n");}
+"if"            {printf("IF statement\n");}
 %%
