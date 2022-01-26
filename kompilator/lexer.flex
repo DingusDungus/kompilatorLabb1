@@ -27,14 +27,14 @@
 "{"                             {printf("leftBrace\n"); return yy::parser::make_LBRACE(yytext);}
 "}"                             {printf("RightBrace\n"); return yy::parser::make_RBRACE(yytext);}
 "for"                           {printf("ForOp\n"); return yy::parser::make_FOR(yytext);}
-"if"                            {printf("ifOp\n"); return yy::parser::make_IF(yytext);}    
+"if"                            {printf("ifOp\n"); return yy::parser::make_IF(yytext);}
 "else"                          {printf("ElseOp\n"); return yy::parser::make_ELSE(yytext);}
 "while"                         {printf("WhileOp\n"); return yy::parser::make_WHILE(yytext);}
 "main"                          {printf("Main\n"); return yy::parser::make_MAIN(yytext);}
 "extends"                       {printf("Extends\n"); return yy::parser::make_EXTENDS(yytext);}
 "public"                        {printf("public\n"); return yy::parser::make_PUBLIC(yytext);}
-"void"                          {printf("Void\n"); return yy::parser::make_VOID(yytext);}  
-"class"                         {printf("class\n"); return yy::parser::make_CLASS(yytext);}  
+"void"                          {printf("Void\n"); return yy::parser::make_VOID(yytext);}
+"class"                         {printf("class\n"); return yy::parser::make_CLASS(yytext);}
 "return"                        {printf("return\n"); return yy::parser::make_RETURN(yytext);}
 "String"                        {printf("String\n"); return yy::parser::make_STRING(yytext);}
 "boolean"                       {printf("Boolean\n"); return yy::parser::make_BOOLEAN(yytext);}
@@ -48,7 +48,7 @@
 [a-zA-Z_][a-zA-Z0-9_]*          {printf("identifier: %s\n", yytext); return yy::parser::make_IDENTIFIER(yytext);}
 
 0|[+|-]?[1-9][0-9]*             {printf("Integer: %s\n", yytext); return yy::parser::make_INTEGER(yytext);}
-["].*["]                        {printf("Stringval: %s\n", yytext); return yy::parser::make_STRINGVAL(yytext);}
+["][.\n]*["]                    {printf("Stringval: %s\n", yytext); return yy::parser::make_STRINGVAL(yytext);}
 
 "/""/"[^\n\r]*[\n]              {printf("Comment\n"); }
 "/""*"[^\n\r]*"*""/"            {printf("Comment\n"); }
