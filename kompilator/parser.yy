@@ -17,21 +17,22 @@
   
 }
 // definition of set of tokens. All tokens are of type string
-%token <std::string> PLUSOP MINUSOP MULTOP MINUS
+%token <std::string> PLUSOP MINUSOP MULTOP MINUS DIVOP
 %token <std::string> LP RP LBRACE RBRACE LBRACKET RBRACKET 
 %token <std::string> STRING BOOLEAN IDENTIFIER INT ASSIGN NEW THIS LENGTH
 %token <std::string> STRINGVAL INTEGER TRUE FALSE
 %token <std::string> FOR IF ELSE WHILE
-%token <std::string> AND LESSER EQUAL NOT 
+%token <std::string> AND LESSER EQUAL NOT GREATER OR
 %token <std::string> MAIN EXTENDS PUBLIC VOID RETURN CLASS SOP
 %token <std::string> DOT COMMA SEMI_C
 %token END 0 "end of file"
 
 // definition of the production rules. All production rules are of type Node
-%type <Node *> expression  addExpression multExpression factor
+%type <Node *> addExpression multExpression factor
+%type <Node *> program
 
 %%
-expression: addExpression 
+program: addExpression 
                           { /*  
                                 Here we create the root node (named Expression), then we add the content of addExpression (accessed through $1) as a child of the root node. 
                                 The "root" is a reference to the root node. 
@@ -68,6 +69,6 @@ multExpression: factor { $$ = $1; printf("r4 "); /*simply return the content of 
                       }
         ;
 
-factor: INT  {  $$ = new Node("Int", $1); printf("r6 "); /* Here we create a leaf node Int. The value of the leaf node is $1 */}
-    | LP expression RP { $$ = $2; printf("r7 "); /* simply return the expression */}
+factor: INTEGER  {  $$ = new Node("Integer", $1); printf("r6 "); /* Here we create a leaf node Int. The value of the leaf node is $1 */}
+    | LP program RP { $$ = $2; printf("r7 "); /* simply return the expression */}
     ;
