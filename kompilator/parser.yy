@@ -17,9 +17,8 @@
   
 }
 // definition of set of tokens. All tokens are of type string
-%token <std::string> PLUSOP MINUSOP MULTOP MINUS DIVOP
-%token <std::string> LP RP LBRACE RBRACE LBRACKET RBRACKET 
-%token <std::string> STRING BOOLEAN IDENTIFIER INT ASSIGN NEW THIS LENGTH
+%token <std::string> RP RBRACE RBRACKET
+%token <std::string> STRING BOOLEAN VAR INT NEW THIS LENGTH
 %token <std::string> STRINGVAL INTEGER TRUE FALSE
 %token <std::string> FOR IF ELSE WHILE
 %token <std::string> AND LESSER EQUAL NOT GREATER OR
@@ -27,14 +26,26 @@
 %token <std::string> DOT COMMA SEMI_C
 %token END 0 "end of file"
 
+%left <std::string> LP LBRACE LBRACKET 
+%left <std::string> PLUSOP MINUS MULTOP DIVOP
+%left <std::string> AND LESSER EQUAL GREATER OR
+%right <std::string> NOT ASSIGN
+
+
 // definition of the production rules. All production rules are of type Node
-%type <Node *> addExpression multExpression factor
-%type <Node *> program
+%type <Node *> expression addExpression multExpression factor
+%type <Node *> mainClass classDeclaration identifier 
+
+%start <Node *> goal
 
 %%
-program: addExpression 
+goal: 
+{
+
+}
+expression: addExpression 
                           { /*  
-                                Here we create the root node (named Expression), then we add the content of addExpression (accessed through $1) as a child of the root node. 
+                                Here we create the root node (named program), then we add the content of addExpression (accessed through $1) as a child of the root node. 
                                 The "root" is a reference to the root node. 
                             */
                             $$ = new Node("Expression", "");
