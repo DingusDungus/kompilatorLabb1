@@ -18,7 +18,7 @@
 }
 // definition of set of tokens. All tokens are of type string
 %token <std::string> RP RBRACE RBRACKET
-%token <std::string> STRING BOOLEAN VAR INT NEW THIS LENGTH
+%token <std::string> STRING BOOLEAN IDENTIFIER INT NEW THIS LENGTH
 %token <std::string> STRINGVAL INTEGER TRUE FALSE
 %token <std::string> FOR IF ELSE WHILE
 %token <std::string> AND LESSER EQUAL NOT GREATER OR
@@ -34,7 +34,7 @@
 
 // definition of the production rules. All production rules are of type Node
 %type <Node *> expression addExpression multExpression factor
-%type <Node *> mainClass classDeclaration identifier 
+%type <Node *> mainClass classDeclaration statement
 
 %start <Node *> goal
 
@@ -42,7 +42,18 @@
 goal: 
 {
 
-}
+};
+
+statement:  LBRACKET (statement)* RBRACKET |
+            IF  LP  expression RP statement ELSE statement |
+            WHILE LP  expression RP statement |
+            SOP LP  expression  RP  SEMI_C |
+            IDENTIFIER  ASSIGN  expression SEMI_C
+            IDENTIFIER LBRACE expression RBRACE ASSIGN expression SEMI_C
+
+ 
+
+
 expression: addExpression 
                           { /*  
                                 Here we create the root node (named program), then we add the content of addExpression (accessed through $1) as a child of the root node. 

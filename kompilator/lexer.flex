@@ -45,7 +45,7 @@
 "new"                           {printf("New\n"); return yy::parser::make_NEW(yytext);}
 "length"                        {printf("Length\n"); return yy::parser::make_LENGTH(yytext);}
 "System.out.println"            {printf("SOP\n"); return yy::parser::make_SOP(yytext);}
-[a-zA-Z_][a-zA-Z0-9_]*          {printf("identifier: %s\n", yytext); return yy::parser::make_VAR(yytext);}
+[a-zA-Z_][a-zA-Z0-9_]*          {printf("identifier: %s\n", yytext); return yy::parser::make_IDENTIFIER(yytext);}
 
 0|[+|-]?[1-9][0-9]*             {printf("Integer: %s\n", yytext); return yy::parser::make_INTEGER(yytext);}
 ["][.\n]*["]                    {printf("Stringval: %s\n", yytext); return yy::parser::make_STRINGVAL(yytext);}
