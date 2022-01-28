@@ -32,6 +32,7 @@
 "while"                         {printf("WhileOp\n"); return yy::parser::make_WHILE(yytext);}
 "main"                          {printf("Main\n"); return yy::parser::make_MAIN(yytext);}
 "extends"                       {printf("Extends\n"); return yy::parser::make_EXTENDS(yytext);}
+"static"                        {printf("Extends\n"); return yy::parser::make_STATIC(yytext);}
 "public"                        {printf("public\n"); return yy::parser::make_PUBLIC(yytext);}
 "void"                          {printf("Void\n"); return yy::parser::make_VOID(yytext);}
 "class"                         {printf("class\n"); return yy::parser::make_CLASS(yytext);}

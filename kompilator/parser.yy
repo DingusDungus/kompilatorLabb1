@@ -22,7 +22,7 @@
 %token <std::string> STRINGVAL INTEGER TRUE FALSE
 %token <std::string> FOR IF ELSE WHILE
 %token <std::string> AND LESSER EQUAL NOT GREATER OR
-%token <std::string> MAIN EXTENDS PUBLIC VOID RETURN CLASS SOP
+%token <std::string> MAIN EXTENDS PUBLIC VOID RETURN CLASS SOP STATIC
 %token <std::string> DOT COMMA SEMI_C
 %token END 0 "end of file"
 
@@ -33,26 +33,120 @@
 
 
 // definition of the production rules. All production rules are of type Node
-%type <Node *> expression addExpression multExpression factor
-%type <Node *> mainClass classDeclaration statement
+%type <Node *> expression addExpression multExpression factor identifier
+%type <Node *> mainClass classDeclaration classDeclarations classDeclarationList statement statements statementList varDeclaration varDeclarations
+%type <Node *> methodDeclaration methodDeclarations methodDeclarationList typeIdentifier typeIdentifiers typeIdentifierList extendsIdentifier
+%type <Node *> expressions expressionList
 
 %start <Node *> goal
 
 %%
-goal: 
-{
+goal: mainClass classDeclarations
 
-};
+mainClass:  CLASS identifier LBRACKET PUBLIC STATIC VOID MAIN LP STRING LBRACE RBRACE identifier RP RBRACKET statement RBRACKET {RBRACKET}
 
-statement:  LBRACKET (statement)* RBRACKET |
+typeIdentifier: type identifier
+
+typeIdentifiers:
+                /* empty */
+                {
+
+                } |
+                typeIdentifierList
+
+typeIdentifierList:
+                  typeIdentifier |
+                  typeIdentifierList COMMA typeIdentifier
+
+expressions:
+                /* empty */
+                {
+
+                } |
+                expressionList
+
+expressionList:
+                  expression |
+                  expressionList COMMA expression
+
+classDeclaration: CLASS identifier extendsIdentifier LBRACKET varDeclarations methodDeclarations RBRACKET
+
+classDeclarationList:
+                    classDeclaration |
+                    classDeclarationList classDeclaration
+
+classDeclarations:
+                  /* empty */
+                  {
+
+                  } |
+                  classDeclarationList
+
+methodDeclaration: PUBLIC type identifier LP typeIdentifiers RP LBRACKET varDeclarations statements RETURN expression SEMI_C RBRACKET
+
+extendsIdentifier: 
+                  /* empty */
+                  {
+
+                  } |
+                  EXTENDS identifier
+
+varDeclarations:
+                /* empty */
+                {
+
+                } |
+                varDeclarations varDeclaration
+
+
+varDeclaration: type identifier SEMI_C
+
+type: INT LBRACE RBRACE |
+      BOOLEAN |
+      INT |
+      identifier |
+      
+
+statements: 
+            /* empty */
+            {
+
+            } |
+            statementList
+
+statementList:  statement |
+                statementList statement
+
+statement:  LBRACKET statements RBRACKET |
             IF  LP  expression RP statement ELSE statement |
             WHILE LP  expression RP statement |
             SOP LP  expression  RP  SEMI_C |
-            IDENTIFIER  ASSIGN  expression SEMI_C
-            IDENTIFIER LBRACE expression RBRACE ASSIGN expression SEMI_C
-
+            identifier  ASSIGN  expression SEMI_C
+            identifier LBRACE expression RBRACE ASSIGN expression SEMI_C
  
+expression: expression AND expression |
+            expression OR expression |
+            expression LESSER expression |
+            expression GREATER expression |
+            expression EQUAL expression |
+            expression PLUSOP expression |
+            expression MINUS expression |
+            expression MULTOP expression |
+            expression DIVOP expression |
+            expression LBRACE expression RBRACE |
+            expression DOT LENGTH |
+            expression DOT identifier LP expressions RP |
+            INTEGER |
+            TRUE |
+            FALSE |
+            identifier |
+            THIS |
+            NEW INT LBRACE expression RBRACE |
+            NEW identifier LP RP |
+            NOT expression |
+            LP expression RP |
 
+identifier: IDENTIFIER
 
 expression: addExpression 
                           { /*  
