@@ -33,15 +33,25 @@
 
 
 // definition of the production rules. All production rules are of type Node
-%type <Node *> expression addExpression multExpression factor identifier
+%type <Node *> expression addExpression multExpression factor identifier type
 %type <Node *> mainClass classDeclaration classDeclarations classDeclarationList statement statements statementList varDeclaration varDeclarations
 %type <Node *> methodDeclaration methodDeclarations methodDeclarationList typeIdentifier typeIdentifiers typeIdentifierList extendsIdentifier
 %type <Node *> expressions expressionList
 
-%start <Node *> goal
+%type <Node *> goal
 
 %%
 goal: mainClass classDeclarations
+{
+  /*  
+    Here we create the root node (named goal), then we add the content of addExpression (accessed through $1) as a child of the root node. 
+    The "root" is a reference to the root node. 
+  */
+  $$ = new Node("Goal", "");
+  $$->children.push_back($1);
+  root = $$;
+  printf("r1 ");
+}
 
 mainClass:  CLASS identifier LBRACKET PUBLIC STATIC VOID MAIN LP STRING LBRACE RBRACE identifier RP RBRACKET statement RBRACKET {RBRACKET}
 
@@ -50,7 +60,7 @@ typeIdentifier: type identifier
 typeIdentifiers:
                 /* empty */
                 {
-
+                  $$ = NULL;
                 } |
                 typeIdentifierList
 
@@ -61,7 +71,7 @@ typeIdentifierList:
 expressions:
                 /* empty */
                 {
-
+                  $$ = NULL;
                 } |
                 expressionList
 
@@ -78,7 +88,7 @@ classDeclarationList:
 classDeclarations:
                   /* empty */
                   {
-
+                    $$ = NULL;
                   } |
                   classDeclarationList
 
@@ -90,37 +100,46 @@ methodDeclarationList:  methodDeclaration |
 methodDeclarations:
                   /* empty */
                   {
-
+                    $$ = NULL;
                   } |
                   methodDeclarationList
 
 extendsIdentifier: 
                   /* empty */
                   {
-
+                    $$ = NULL;
                   } |
                   EXTENDS identifier
 
 varDeclarations:
                 /* empty */
                 {
-
+                  $$ = NULL;
                 } |
                 varDeclarations varDeclaration
 
 
 varDeclaration: type identifier SEMI_C
 
-type: INT LBRACE RBRACE |
-      BOOLEAN |
-      INT |
+type: INT LBRACE RBRACE 
+      {
+        $$ = $1;
+      };|
+      BOOLEAN 
+      {
+        $$ = $1;
+      };|
+      INT 
+      {
+        $$ = $1;
+      };|
       identifier |
       
 
 statements: 
             /* empty */
             {
-
+              $$ = NULL;
             } |
             statementList
 
@@ -134,29 +153,124 @@ statement:  LBRACKET statements RBRACKET |
             identifier  ASSIGN  expression SEMI_C
             identifier LBRACE expression RBRACE ASSIGN expression SEMI_C
  
-expression: expression AND expression |
-            expression OR expression |
-            expression LESSER expression |
-            expression GREATER expression |
-            expression EQUAL expression |
-            expression PLUSOP expression |
-            expression MINUS expression |
-            expression MULTOP expression |
-            expression DIVOP expression |
-            expression LBRACE expression RBRACE |
-            expression DOT LENGTH |
-            expression DOT identifier LP expressions RP |
-            INTEGER |
-            TRUE |
-            FALSE |
-            identifier |
-            THIS |
-            NEW INT LBRACE expression RBRACE |
-            NEW identifier LP RP |
-            NOT expression |
-            LP expression RP |
+expression: expression AND expression 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+            };|
+            expression OR expression 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+            };|
+            expression LESSER expression 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+            };|
+            expression GREATER expression 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+            };|
+            expression EQUAL expression 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+            };|
+            expression PLUSOP expression 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+            };|
+            expression MINUS expression 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+            };|
+            expression MULTOP expression 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+            };|
+            expression DIVOP expression 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+            };|
+            expression LBRACE expression RBRACE 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+            };|
+            expression DOT LENGTH 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($1);
+            };|
+            expression DOT identifier LP expressions RP 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+              $$->children.push_back($5);
+            };|
+            INTEGER 
+            {
+              $$ = $1;
+            };|
+            TRUE 
+            {
+              $$ = $1;
+            };|
+            FALSE 
+            {
+              $$ = $1;
+            };|
+            identifier 
+            {
+              $$ = new Node("expression", "");
+              $$->children.push_back($1);
+            };|
+            THIS
+            {
+              $$ = $1;
+            }; |
+            NEW INT LBRACE expression RBRACE 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($4);
+            };|
+            NEW identifier LP RP 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($2);
+            };|
+            NOT expression 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($2);
+            };|
+            LP expression RP 
+            {
+              $$ = new Node("Expression", "");
+              $$->children.push_back($2);
+            };
 
 identifier: IDENTIFIER
+{
+  $$ = $1;
+};
 
 expression: addExpression 
                           { /*  
