@@ -1,1 +1,1 @@
-10+12*18
+class BigBoyClass { public static void main(String[] args) {}}

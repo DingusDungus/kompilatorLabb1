@@ -21,7 +21,6 @@
 %token <std::string> STRING BOOLEAN IDENTIFIER INT NEW THIS LENGTH
 %token <std::string> STRINGVAL INTEGER TRUE FALSE
 %token <std::string> FOR IF ELSE WHILE
-%token <std::string> AND LESSER EQUAL NOT GREATER OR
 %token <std::string> MAIN EXTENDS PUBLIC VOID RETURN CLASS SOP STATIC
 %token <std::string> DOT COMMA SEMI_C
 %token END 0 "end of file"
@@ -33,7 +32,7 @@
 
 
 // definition of the production rules. All production rules are of type Node
-%type <Node *> expression addExpression multExpression factor identifier type
+%type <Node *> expression identifier type
 %type <Node *> mainClass classDeclaration classDeclarations classDeclarationList statement statements statementList varDeclaration varDeclarations
 %type <Node *> methodDeclaration methodDeclarations methodDeclarationList typeIdentifier typeIdentifiers typeIdentifierList extendsIdentifier
 %type <Node *> expressions expressionList
@@ -49,53 +48,130 @@ goal: mainClass classDeclarations
   */
   $$ = new Node("Goal", "");
   $$->children.push_back($1);
+  $$->children.push_back($2);
   root = $$;
   printf("r1 ");
 }
 
-mainClass:  CLASS identifier LBRACKET PUBLIC STATIC VOID MAIN LP STRING LBRACE RBRACE identifier RP RBRACKET statement RBRACKET {RBRACKET}
+mainClass:  CLASS identifier LBRACE PUBLIC STATIC VOID MAIN LP STRING LBRACKET RBRACKET identifier RP LBRACE statement RBRACE RBRACE
+            {
+              $$ = new Node("ExpressionList", "");
+              $$->children.push_back($2);
+              $$->children.push_back($12);
+              $$->children.push_back($15);
+            };
 
 typeIdentifier: type identifier
+                {
+                  $$ = new Node("TypeIdentifier", "");
+                  $$->children.push_back($1);
+                  $$->children.push_back($2);
+                };
 
 typeIdentifiers:
                 /* empty */
                 {
                   $$ = NULL;
-                } |
+                };|
                 typeIdentifierList
+                {
+                  $$ = new Node("TypeIdentifiers", "");
+                  $$->children.push_back($1);
+                };
 
 typeIdentifierList:
-                  typeIdentifier |
+                  typeIdentifier 
+                  {
+                    $$ = new Node("TypeIdentifierList", "");
+                    $$->children.push_back($1);
+                  };|
                   typeIdentifierList COMMA typeIdentifier
+                  {
+                    $$ = new Node("TypeIdentifierList", "");
+                    $$->children.push_back($1);
+                    $$->children.push_back($3);
+                  };
 
 expressions:
                 /* empty */
                 {
                   $$ = NULL;
-                } |
+                };|
                 expressionList
+                {
+                $$ = new Node("Expressions", "");
+                $$->children.push_back($1);
+              };
+                
 
 expressionList:
-                  expression |
-                  expressionList COMMA expression
+              expression 
+              {
+                $$ = new Node("ExpressionList", "");
+                $$->children.push_back($1);
+              };|
+              expressionList COMMA expression
+              {
+                $$ = new Node("ExpressionList", "");
+                $$->children.push_back($1);
+                $$->children.push_back($3);
+              };
 
-classDeclaration: CLASS identifier extendsIdentifier LBRACKET varDeclarations methodDeclarations RBRACKET
+classDeclaration: CLASS identifier extendsIdentifier LBRACE varDeclarations methodDeclarations RBRACE
+                  {
+                    $$ = new Node("ClassDeclaration", "");
+                    $$->children.push_back($2);
+                    $$->children.push_back($3);
+                    $$->children.push_back($5);
+                    $$->children.push_back($6);
+                  };
 
 classDeclarationList:
-                    classDeclaration |
+                    classDeclaration 
+                    {
+                      $$ = new Node("ClassDeclarationList", "");
+                      $$->children.push_back($1);
+                    };|
                     classDeclarationList classDeclaration
+                    {
+                      $$ = new Node("ClassDeclarationList", "");
+                      $$->children.push_back($1);
+                      $$->children.push_back($2);
+                    };
 
 classDeclarations:
                   /* empty */
                   {
                     $$ = NULL;
-                  } |
+                  };|
                   classDeclarationList
+                  {
+                    $$ = new Node("ClassDeclarations", "");
+                    $$->children.push_back($1);
+                  };
 
-methodDeclaration: PUBLIC type identifier LP typeIdentifiers RP LBRACKET varDeclarations statements RETURN expression SEMI_C RBRACKET
+methodDeclaration:  PUBLIC type identifier LP typeIdentifiers RP LBRACE varDeclarations statements RETURN expression SEMI_C RBRACE
+                    {
+                      $$ = new Node("MethodDeclaration", "");
+                      $$->children.push_back($2);
+                      $$->children.push_back($3);
+                      $$->children.push_back($5);
+                      $$->children.push_back($8);
+                      $$->children.push_back($9);
+                      $$->children.push_back($11);
+                    }
 
-methodDeclarationList:  methodDeclaration |
+methodDeclarationList:  methodDeclaration 
+                        {
+                          $$ = new Node("MethodDeclarationList", "");
+                          $$->children.push_back($1);
+                        };|
                         methodDeclarationList methodDeclaration
+                        {
+                          $$ = new Node("MethodDeclarationList", "");
+                          $$->children.push_back($1);
+                          $$->children.push_back($2);
+                        };
 
 methodDeclarations:
                   /* empty */
@@ -103,6 +179,11 @@ methodDeclarations:
                     $$ = NULL;
                   } |
                   methodDeclarationList
+                  {
+                    $$ = new Node("MethodDeclarations", "");
+                    $$->children.push_back($1);
+                  };
+                  
 
 extendsIdentifier: 
                   /* empty */
@@ -110,6 +191,10 @@ extendsIdentifier:
                     $$ = NULL;
                   } |
                   EXTENDS identifier
+                  {
+                    $$ = new Node("ExtendsIdentifier", "");
+                    $$->children.push_back($2);
+                  };
 
 varDeclarations:
                 /* empty */
@@ -117,23 +202,38 @@ varDeclarations:
                   $$ = NULL;
                 } |
                 varDeclarations varDeclaration
+                {
+                  $$ = new Node("VarDeclarations", "");
+                  $$->children.push_back($1);
+                  $$->children.push_back($2);
+                };
+                
 
 
 varDeclaration: type identifier SEMI_C
+                {
+                  $$ = new Node("VarDeclaration", "");
+                  $$->children.push_back($1);
+                  $$->children.push_back($2);
+                };
 
-type: INT LBRACE RBRACE 
+type: INT LBRACKET RBRACKET 
       {
-        $$ = $1;
+
       };|
       BOOLEAN 
       {
-        $$ = $1;
+
       };|
       INT 
       {
-        $$ = $1;
+
       };|
-      identifier |
+      identifier 
+      {
+        $$ = new Node("Type", "");
+        $$->children.push_back($1);
+      };
       
 
 statements: 
@@ -142,16 +242,59 @@ statements:
               $$ = NULL;
             } |
             statementList
+            {
+              $$ = new Node("Statements", "");
+              $$->children.push_back($1);
+            };
 
-statementList:  statement |
+statementList:  statement 
+                {
+                  $$ = new Node("StatementList", "");
+                  $$->children.push_back($1);
+                };|
                 statementList statement
+                {
+                  $$ = new Node("StatementList", "");
+                  $$->children.push_back($1);
+                  $$->children.push_back($2);
+                };
 
-statement:  LBRACKET statements RBRACKET |
-            IF  LP  expression RP statement ELSE statement |
-            WHILE LP  expression RP statement |
-            SOP LP  expression  RP  SEMI_C |
-            identifier  ASSIGN  expression SEMI_C
-            identifier LBRACE expression RBRACE ASSIGN expression SEMI_C
+statement:  LBRACE statements RBRACE 
+            {
+              $$ = new Node("Statement", "");
+              $$->children.push_back($2);
+            };|
+            IF  LP  expression RP statement ELSE statement 
+            {
+              $$ = new Node("Statement", "");
+              $$->children.push_back($3);
+              $$->children.push_back($5);
+              $$->children.push_back($7);
+            };|
+            WHILE LP  expression RP statement 
+            {
+              $$ = new Node("Statement", "");
+              $$->children.push_back($3);
+              $$->children.push_back($5);
+            };|
+            SOP LP  expression  RP  SEMI_C 
+            {
+              $$ = new Node("Statement", "");
+              $$->children.push_back($3);
+            };|
+            identifier  ASSIGN  expression SEMI_C 
+            {
+              $$ = new Node("Statement", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+            };|
+            identifier LBRACKET expression RBRACKET ASSIGN expression SEMI_C
+            {
+              $$ = new Node("Statement", "");
+              $$->children.push_back($1);
+              $$->children.push_back($3);
+              $$->children.push_back($6);
+            };
  
 expression: expression AND expression 
             {
@@ -227,15 +370,15 @@ expression: expression AND expression
             };|
             INTEGER 
             {
-              $$ = $1;
+            
             };|
             TRUE 
             {
-              $$ = $1;
+              
             };|
             FALSE 
             {
-              $$ = $1;
+              
             };|
             identifier 
             {
@@ -244,9 +387,9 @@ expression: expression AND expression
             };|
             THIS
             {
-              $$ = $1;
+              
             }; |
-            NEW INT LBRACE expression RBRACE 
+            NEW INT LBRACKET expression RBRACKET 
             {
               $$ = new Node("Expression", "");
               $$->children.push_back($4);
@@ -268,47 +411,7 @@ expression: expression AND expression
             };
 
 identifier: IDENTIFIER
-{
-  $$ = $1;
-};
+            {
+              
+            };
 
-expression: addExpression 
-                          { /*  
-                                Here we create the root node (named program), then we add the content of addExpression (accessed through $1) as a child of the root node. 
-                                The "root" is a reference to the root node. 
-                            */
-                            $$ = new Node("Expression", "");
-                            $$->children.push_back($1);
-                            root = $$;
-                            printf("r1 ");
-                          };
-
-addExpression: multExpression { $$ = $1; printf("r2 "); /*simply return the content of multExpression*/}
-             | addExpression PLUSOP multExpression {  /*
-                                                  Create a subtree that corresponds to the AddExpressions
-                                                  The root of the subtree is AddExpression
-                                                  The childs of the AddExpression subtree are the left hand side (addExpression accessed through $1) and right hand side of the expression (multExpression accessed through $3)
-                                                */
-                            $$ = new Node("AddExpression", "");
-                            $$->children.push_back($1);
-                            $$->children.push_back($3);
-                            printf("r3 ");
-                          }
-      ;
-
-multExpression: factor { $$ = $1; printf("r4 "); /*simply return the content of multExpression*/}
-              | multExpression MULTOP factor { /*
-                                                  Create a subtree that corresponds to the MultExpression
-                                                  The root of the subtree is MultExpression
-                                                  The childs of the MultExpression subtree are the left hand side (multExpression accessed through $1) and right hand side of the expression (factor accessed through $3)
-                                                */
-                            $$ = new Node("MultExpression", ""); 
-                            $$->children.push_back($1);
-                            $$->children.push_back($3);
-                            printf("r5 ");
-                      }
-        ;
-
-factor: INTEGER  {  $$ = new Node("Integer", $1); printf("r6 "); /* Here we create a leaf node Int. The value of the leaf node is $1 */}
-    | LP program RP { $$ = $2; printf("r7 "); /* simply return the expression */}
-    ;
