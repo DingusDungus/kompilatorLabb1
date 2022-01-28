@@ -84,6 +84,16 @@ classDeclarations:
 
 methodDeclaration: PUBLIC type identifier LP typeIdentifiers RP LBRACKET varDeclarations statements RETURN expression SEMI_C RBRACKET
 
+methodDeclarationList:  methodDeclaration |
+                        methodDeclarationList methodDeclaration
+
+methodDeclarations:
+                  /* empty */
+                  {
+
+                  } |
+                  methodDeclarationList
+
 extendsIdentifier: 
                   /* empty */
                   {
