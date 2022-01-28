@@ -38,6 +38,7 @@
 %type <Node *> expressions expressionList
 
 %type <Node *> goal
+%type <Node *> end
 
 %%
 goal: mainClass classDeclarations end
@@ -49,6 +50,7 @@ goal: mainClass classDeclarations end
   $$ = new Node("Goal", "");
   $$->children.push_back($1);
   $$->children.push_back($2);
+  $$->children.push_back($3);
   root = $$;
   printf("r1 ");
 }
@@ -492,5 +494,5 @@ identifier: IDENTIFIER
 
 end: END
    {
-   // empty
+    $$ = new Node("End", "");
    }
