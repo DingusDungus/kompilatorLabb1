@@ -40,7 +40,7 @@
 %type <Node *> goal
 
 %%
-goal: mainClass classDeclarations
+goal: mainClass classDeclarations END
 {
   /*  
     Here we create the root node (named goal), then we add the content of addExpression (accessed through $1) as a child of the root node. 
@@ -50,7 +50,6 @@ goal: mainClass classDeclarations
   $$->children.push_back($1);
   $$->children.push_back($2);
   root = $$;
-  printf("r1 ");
 }
 
 mainClass:  CLASS identifier LBRACE PUBLIC STATIC VOID MAIN LP STRING LBRACKET RBRACKET identifier RP LBRACE statement RBRACE RBRACE
@@ -185,7 +184,7 @@ methodDeclaration:  PUBLIC type identifier LP typeIdentifiers RP LBRACE varDecla
                       $$->children.push_back($11);
                       $$->children.push_back(new Node("MethodDeclaration",$12));
                       $$->children.push_back(new Node("MethodDeclaration",$13));
-                    }
+                    };
 
 methodDeclarationList:  methodDeclaration 
                         {
@@ -203,7 +202,7 @@ methodDeclarations:
                   /* empty */
                   {
                     $$ = NULL;
-                  } |
+                  };|
                   methodDeclarationList
                   {
                     $$ = new Node("MethodDeclarations", "");
@@ -215,7 +214,7 @@ extendsIdentifier:
                   /* empty */
                   {
                     $$ = NULL;
-                  } |
+                  }; |
                   EXTENDS identifier
                   {
                     $$ = new Node("ExtendsIdentifier", "");
@@ -227,7 +226,7 @@ varDeclarations:
                 /* empty */
                 {
                   $$ = NULL;
-                } |
+                }; |
                 varDeclarations varDeclaration
                 {
                   $$ = new Node("VarDeclarations", "");
@@ -271,7 +270,7 @@ statements:
             /* empty */
             {
               $$ = NULL;
-            } |
+            }; |
             statementList
             {
               $$ = new Node("Statements", "");
@@ -489,4 +488,3 @@ identifier: IDENTIFIER
             {
              $$ = new Node("Identifier", $1); 
             };
-
