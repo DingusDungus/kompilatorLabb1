@@ -2,7 +2,7 @@
 #define YY_DECL yy::parser::symbol_type yylex()
 #include "Node.h"
 
-#line 5 "lex.yy.c"
+#line 6 "lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -544,7 +544,7 @@ char *yytext;
 #line 1 "lexer.flex"
 
 #define YY_NO_INPUT 1
-#line 547 "lex.yy.c"
+#line 548 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -772,7 +772,7 @@ YY_DECL
 #line 7 "lexer.flex"
 
 
-#line 775 "lex.yy.c"
+#line 776 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1067,7 +1067,7 @@ YY_RULE_SETUP
 #line 59 "lexer.flex"
 ECHO;
 	YY_BREAK
-#line 1070 "lex.yy.c"
+#line 1071 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
