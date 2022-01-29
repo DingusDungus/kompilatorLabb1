@@ -37,14 +37,14 @@
 "boolean"                       {return yy::parser::make_BOOLEAN(yytext);}
 "true"                          {return yy::parser::make_TRUE(yytext);}
 "false"                         {return yy::parser::make_FALSE(yytext);}
-"int"                           {return yy::parser::make_INT(yytext);}
+"int"                           {return yy::parser::make_INTEGER(yytext);}
 "this"                          {return yy::parser::make_THIS(yytext);}
 "new"                           {return yy::parser::make_NEW(yytext);}
 "length"                        {return yy::parser::make_LENGTH(yytext);}
 "System.out.println"            {return yy::parser::make_SOP(yytext);}
 [a-zA-Z_][a-zA-Z0-9_]*          {return yy::parser::make_IDENTIFIER(yytext);}
 
-0|[+|-]?[1-9][0-9]*             {return yy::parser::make_INTEGER(yytext);}
+0|[+|-]?[1-9][0-9]*             {return yy::parser::make_INT(yytext);}
 ["].*["]                        {return yy::parser::make_STRINGVAL(yytext);}
 
 [ \t\n]+                        {}

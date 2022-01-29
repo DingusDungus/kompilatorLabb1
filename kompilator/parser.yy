@@ -52,7 +52,6 @@ goal: mainClass classDeclarations end
   $$->children.push_back($2);
   $$->children.push_back($3);
   root = $$;
-  printf("r1 ");
 }
 
 mainClass:  CLASS identifier LBRACE PUBLIC STATIC VOID MAIN LP STRING LBRACKET RBRACKET identifier RP LBRACE statement RBRACE RBRACE
@@ -87,7 +86,7 @@ typeIdentifier: type identifier
 typeIdentifiers:
                 /* empty */
                 {
-                  $$ = NULL;
+                 $$ = new Node("","");
                 };|
                 typeIdentifierList
                 {
@@ -112,7 +111,7 @@ typeIdentifierList:
 expressions:
                 /* empty */
                 {
-                  $$ = NULL;
+                  $$ = new Node("","");
                 };|
                 expressionList
                 {
@@ -163,7 +162,7 @@ classDeclarationList:
 classDeclarations:
                   /* empty */
                   {
-                    $$ = NULL;
+                    $$ = new Node("","");
                   };|
                   classDeclarationList
                   {
@@ -187,7 +186,7 @@ methodDeclaration:  PUBLIC type identifier LP typeIdentifiers RP LBRACE varDecla
                       $$->children.push_back($11);
                       $$->children.push_back(new Node("MethodDeclaration",$12));
                       $$->children.push_back(new Node("MethodDeclaration",$13));
-                    }
+                    };
 
 methodDeclarationList:  methodDeclaration
                         {
@@ -204,8 +203,8 @@ methodDeclarationList:  methodDeclaration
 methodDeclarations:
                   /* empty */
                   {
-                    $$ = NULL;
-                  } |
+                    $$ = new Node("","");
+                  };|
                   methodDeclarationList
                   {
                     $$ = new Node("MethodDeclarations", "");
@@ -216,8 +215,8 @@ methodDeclarations:
 extendsIdentifier:
                   /* empty */
                   {
-                    $$ = NULL;
-                  } |
+                    $$ = new Node("","");
+                  }; |
                   EXTENDS identifier
                   {
                     $$ = new Node("ExtendsIdentifier", "");
@@ -228,8 +227,8 @@ extendsIdentifier:
 varDeclarations:
                 /* empty */
                 {
-                  $$ = NULL;
-                } |
+                  $$ = new Node("","");
+                }; |
                 varDeclarations varDeclaration
                 {
                   $$ = new Node("VarDeclarations", "");
@@ -272,8 +271,8 @@ type: INT LBRACKET RBRACKET
 statements:
             /* empty */
             {
-              $$ = NULL;
-            } |
+              $$ = new Node("","");
+            }; |
             statementList
             {
               $$ = new Node("Statements", "");

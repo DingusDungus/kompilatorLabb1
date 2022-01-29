@@ -972,7 +972,7 @@ YY_RULE_SETUP
 case 32:
 YY_RULE_SETUP
 #line 40 "lexer.flex"
-{return yy::parser::make_INT(yytext);}
+{return yy::parser::make_INTEGER(yytext);}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
@@ -1002,7 +1002,7 @@ YY_RULE_SETUP
 case 38:
 YY_RULE_SETUP
 #line 47 "lexer.flex"
-{return yy::parser::make_INTEGER(yytext);}
+{return yy::parser::make_INT(yytext);}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
