@@ -55,5 +55,5 @@
 "/""*"[^\n\r]*"*""/"            {printf("Comment\n"); }
 [ \t\n]+                        {printf("Whitespace\n"); }
 
-<<EOF>>                 {printf("End\n"); return yy::parser::make_END();}
+<<EOF>>                         {printf("EOF\n"); return yy::parser::make_END();}
 %%
