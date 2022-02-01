@@ -410,7 +410,7 @@ expression: expression AND expression
               $$->children.push_back(new Node("Expression", $2));
               $$->children.push_back($3);
             };|
-            expression LBRACE expression RBRACE
+            expression LBRACKET expression RBRACKET
             {
               $$ = new Node("Expression", "");
               $$->children.push_back($1);
