@@ -17,18 +17,21 @@
 
 }
 // definition of set of tokens. All tokens are of type string
-%token <std::string> RP RBRACE RBRACKET
+%token <std::string> LP RP RBRACE RBRACKET
 %token <std::string> STRING BOOLEAN IDENTIFIER INT NEW THIS LENGTH
 %token <std::string> STRINGVAL INTEGER TRUE FALSE
 %token <std::string> FOR IF ELSE WHILE
 %token <std::string> MAIN EXTENDS PUBLIC VOID RETURN CLASS SOP STATIC
-%token <std::string> DOT COMMA SEMI_C
+%token <std::string> COMMA SEMI_C
 %token END 0 "end of file"
 
-%left <std::string> LP LBRACE LBRACKET
-%left <std::string> PLUSOP MINUS MULTOP DIVOP
+%right <std::string> NOT
 %left <std::string> AND LESSER EQUAL GREATER OR
-%right <std::string> NOT ASSIGN
+%left <std::string> PLUSOP MINUS
+%left <std::string> MULTOP DIVOP
+%left <std::string> DOT
+%right <std::string> ASSIGN
+%left <std::string> LBRACE LBRACKET
 
 
 // definition of the production rules. All production rules are of type Node

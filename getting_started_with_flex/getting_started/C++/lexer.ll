@@ -1,11 +1,8 @@
 %top{
 #define YYSTYPE int
+#include <iostream>
 }
 %option noyywrap
-%x STRING
 %%
-[^"]*           { printf("OTHER: %s\n",yytext);}    /* Any character */
-["]              {BEGIN STRING;}
-<STRING>["]      {BEGIN INITIAL;}
-<STRING>[^"]*   {printf("STRING: %s\n", yytext);}
+[+|-]?[1-9][0-9]*\.?[0-9]+|[1-9][0-9]*\.|0\.[0-9]+ {std::cout << "This is a float!\n";}
 %%

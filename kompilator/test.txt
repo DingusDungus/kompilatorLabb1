@@ -1,7 +1,7 @@
 class BigBoyClass {
     public static void main(String[] args) 
     {
-       cum = 5; 
+       cum = 5 + 5 * 4; 
     }
 }
 
