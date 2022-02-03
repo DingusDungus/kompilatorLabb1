@@ -8,7 +8,8 @@ class BigBoyClass
 
 class testClass
 {
-   public int testMethod()
+   int var1;
+   public int testMethod(int param1, boolean param2)
    {
       return 5;
    }
