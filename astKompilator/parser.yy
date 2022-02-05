@@ -59,24 +59,12 @@ goal: mainClass classDeclarations end
 
 mainClass:  CLASS identifier LBRACE PUBLIC STATIC VOID MAIN LP STRING LBRACKET RBRACKET identifier RP LBRACE statement RBRACE RBRACE
             {
-              $$ = new Node("ExpressionList", "");
-              $$->children.push_back(new Node("", ""));
+              $$ = new Node("MainClass", "");
+              $$ = new Node("MainClass", "");
               $$->children.push_back($2);
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back($12);
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back($15);
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
+              $2->children.push_back(new Node("PublicStaticVoidMainMethod", ""));
+              $2->children.push_back($12);
+              $12->children.push_back($15);
             };
 
 typeIdentifier: type identifier
@@ -107,7 +95,6 @@ typeIdentifierList:
                   {
                     $$ = new Node("TypeIdentifierList", "");
                     $$->children.push_back($1);
-                    $$->children.push_back(new Node("", ""));
                     $$->children.push_back($3);
                   };
 
@@ -133,20 +120,16 @@ expressionList:
               {
                 $$ = new Node("ExpressionList", "");
                 $$->children.push_back($1);
-                $$->children.push_back(new Node("", ""));
                 $$->children.push_back($3);
               };
 
 classDeclaration: CLASS identifier extendsIdentifier LBRACE varDeclarations methodDeclarations RBRACE
                   {
                     $$ = new Node("ClassDeclaration", "");
-                    $$->children.push_back(new Node("",""));
                     $$->children.push_back($2);
                     $$->children.push_back($3);
-                    $$->children.push_back(new Node("",""));
                     $$->children.push_back($5);
                     $$->children.push_back($6);
-                    $$->children.push_back(new Node("",""));
                   };
 
 classDeclarationList:
@@ -176,19 +159,12 @@ classDeclarations:
 methodDeclaration:  PUBLIC type identifier LP typeIdentifiers RP LBRACE varDeclarations statements RETURN expression SEMI_C RBRACE
                     {
                       $$ = new Node("MethodDeclaration", "");
-                      $$->children.push_back(new Node("",""));
                       $$->children.push_back($2);
                       $$->children.push_back($3);
-                      $$->children.push_back(new Node("",""));
-                      $$->children.push_back($5);
-                      $$->children.push_back(new Node("",""));
-                      $$->children.push_back(new Node("",""));
-                      $$->children.push_back($8);
-                      $$->children.push_back($9);
-                      $$->children.push_back(new Node("",""));
-                      $$->children.push_back($11);
-                      $$->children.push_back(new Node("",""));
-                      $$->children.push_back(new Node("",""));
+                      $3->children.push_back($5);
+                      $5->children.push_back($8);
+                      $5->children.push_back($9);
+                      $5->children.push_back($11);
                     };
 
 methodDeclarationList:  methodDeclaration
@@ -223,7 +199,6 @@ extendsIdentifier:
                   EXTENDS identifier
                   {
                     $$ = new Node("ExtendsIdentifier", "");
-                    $$->children.push_back(new Node("",""));
                     $$->children.push_back($2);
                   };
 
@@ -246,27 +221,26 @@ varDeclaration: type identifier SEMI_C
                   $$ = new Node("VarDeclaration", "");
                   $$->children.push_back($1);
                   $$->children.push_back($2);
-                  $$->children.push_back(new Node("",""));
                 };
 
 type: INT LBRACKET RBRACKET
       {
-        $$ = new Node("Type", "");
+        $$ = new Node("IntegerArrayType", "");
         $$->children.push_back(new Node("Type",$1));
         $$->children.push_back(new Node("Type",$2));
         $$->children.push_back(new Node("Type",$3));
       };|
       BOOLEAN
       {
-        $$ = new Node("Type", $1);
+        $$ = new Node("BooleanType", $1);
       };|
       INT
       {
-        $$ = new Node("Type", $1);
+        $$ = new Node("IntegerType", $1);
       };|
       identifier
       {
-        $$ = new Node("Type", "");
+        $$ = new Node("identifierType", "");
         $$->children.push_back($1);
       };
 
@@ -323,12 +297,8 @@ statement:  LBRACE statements RBRACE
             };|
             SOP LP  expression  RP  SEMI_C
             {
-              $$ = new Node("Statement", "");
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
+              $$ = new Node("SystemOutPrint", "");
               $$->children.push_back($3);
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
             };|
             identifier  ASSIGN  expression SEMI_C
             {
@@ -354,139 +324,114 @@ expression: expression AND expression
             {
               $$ = new Node("Expression", "AndOp");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
             };|
             expression OR expression
             {
               $$ = new Node("Expression", "OrOp");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
             };|
             expression LESSER expression
             {
               $$ = new Node("Expression", "LesserOp");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
             };|
             expression GREATER expression
             {
               $$ = new Node("Expression", "GreaterOp");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
             };|
             expression EQUAL expression
             {
               $$ = new Node("Expression", "AssignOp");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
             };|
             expression PLUSOP expression
             {
               $$ = new Node("Expression", "AddOp");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
             };|
             expression MINUS expression
             {
               $$ = new Node("Expression", "SubOp");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
             };|
             expression MULTOP expression
             {
               $$ = new Node("Expression", "Multop");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
             };|
             expression DIVOP expression
             {
               $$ = new Node("Expression", "DivOp");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
             };|
             expression LBRACKET expression RBRACKET
             {
               $$ = new Node("Expression", "indexExpression");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
-              $$->children.push_back(new Node("", ""));
             };|
             expression DOT LENGTH
             {
               $$ = new Node("Expression", "dotlength");
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
             };|
             expression DOT identifier LP expressions RP
             {
               $$ = new Node("Expression", "DotOp");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($5);
-              $$->children.push_back(new Node("", ""));
             };|
             INTEGER
             {
-              $$ = new Node("Expression", $1);
+              $$ = new Node("IntegerLiteral", $1);
             };|
             TRUE
             {
-              $$ = new Node("Expression", $1);
+              $$ = new Node("BooleanExpression", $1);
             };|
             FALSE
             {
-              $$ = new Node("Expression", $1);
+              $$ = new Node("BooleanExpression", $1);
             };|
             identifier
             {
-              $$ = new Node("expression", "");
+              $$ = new Node("IdentifierExpression", "");
               $$->children.push_back($1);
             };|
             THIS
             {
-              $$ = new Node("Expression", $1);
+              $$ = new Node("ThisExpression", $1);
             }; |
             NEW INT LBRACKET expression RBRACKET
             {
               $$ = new Node("Expression", "newIntArray");
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($4);
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
             };|
             NEW identifier LP RP
             {
               $$ = new Node("Expression", "newIdentifier");
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($2);
-              $$->children.push_back(new Node("", ""));
             };|
             NOT expression
             {
               $$ = new Node("Expression", "NotOp");
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($2);
             };|
             LP expression RP
             {
               $$ = new Node("Expression", "");
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($2);
-              $$->children.push_back(new Node("", ""));
             };
 
 identifier: IDENTIFIER

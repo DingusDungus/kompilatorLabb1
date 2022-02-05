@@ -21,7 +21,7 @@ public:
 	{
 		type = "uninitialised";
 		value = "uninitialised"; }   // Bison needs this.
-  
+
 	void print_tree(int depth=0) {
 		for(int i=0; i<depth; i++)
 		cout << "  ";
@@ -29,7 +29,7 @@ public:
 		for(auto i=children.begin(); i!=children.end(); i++)
 		(*i)->print_tree(depth+1);
 	}
-  
+
 	void generate_tree() {
 		std::ofstream outStream;
 	  	outStream.open("tree.dot");
