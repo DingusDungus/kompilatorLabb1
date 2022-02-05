@@ -128,8 +128,8 @@ classDeclaration: CLASS identifier extendsIdentifier LBRACE varDeclarations meth
                     $$ = new Node("ClassDeclaration", "");
                     $$->children.push_back($2);
                     $$->children.push_back($3);
-                    $$->children.push_back($5);
-                    $$->children.push_back($6);
+                    $3->children.push_back($5);
+                    $3->children.push_back($6);
                   };
 
 classDeclarationList:
@@ -271,28 +271,19 @@ statementList:  statement
 statement:  LBRACE statements RBRACE
             {
               $$ = new Node("Statement", "");
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($2);
-              $$->children.push_back(new Node("", ""));
             };|
             IF  LP  expression RP statement ELSE statement
             {
               $$ = new Node("Statement", "");
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($5);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($7);
             };|
             WHILE LP  expression RP statement
             {
               $$ = new Node("Statement", "");
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($5);
             };|
             SOP LP  expression  RP  SEMI_C
@@ -304,20 +295,14 @@ statement:  LBRACE statements RBRACE
             {
               $$ = new Node("Statement", "");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
-              $$->children.push_back(new Node("", ""));
             };|
             identifier LBRACKET expression RBRACKET ASSIGN expression SEMI_C
             {
               $$ = new Node("Statement", "");
               $$->children.push_back($1);
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($3);
-              $$->children.push_back(new Node("", ""));
-              $$->children.push_back(new Node("", ""));
               $$->children.push_back($6);
-              $$->children.push_back(new Node("", ""));
             };
 
 expression: expression AND expression
