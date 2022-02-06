@@ -7,10 +7,10 @@ class Factorial {
 class Fac extends someClass {
     public int ComputeFac(int num, int[] someArray) {
 	int num_aux;
-	while(a == "hello"){
+	while(num == someArray[2] && num_aux == 10){
 	  System.out.println(a);
 	}
-	if (num < 1)
+	if (num < 1 || 1 > num)
 	    num_aux = 1;
 	else
 	    num_aux = num * (this.ComputeFac(num - 1));

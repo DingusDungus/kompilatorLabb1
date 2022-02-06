@@ -26,7 +26,8 @@
 %token END 0 "end of file"
 
 %right <std::string> NOT
-%left <std::string> AND LESSER EQUAL GREATER OR
+%left <std::string> AND OR
+%left <std::string> LESSER EQUAL GREATER
 %left <std::string> PLUSOP MINUS
 %left <std::string> MULTOP DIVOP
 %left <std::string> DOT
@@ -362,7 +363,7 @@ expression: expression AND expression
             };|
             expression LBRACKET expression RBRACKET
             {
-              $$ = new Node("Expression", "indexExpression");
+              $$ = new Node("Expression", "ArrayIndexAccessExpression");
               $$->children.push_back($1);
               $$->children.push_back($3);
             };|
