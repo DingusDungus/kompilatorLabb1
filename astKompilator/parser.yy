@@ -60,11 +60,12 @@ goal: mainClass classDeclarations end
 mainClass:  CLASS identifier LBRACE PUBLIC STATIC VOID MAIN LP STRING LBRACKET RBRACKET identifier RP LBRACE statement RBRACE RBRACE
             {
               $$ = new Node("MainClass", "");
-              $$ = new Node("MainClass", "");
               $$->children.push_back($2);
-              $2->children.push_back(new Node("PublicStaticVoidMainMethod", ""));
-              $2->children.push_back($12);
-              $12->children.push_back($15);
+              /* mainMethod node */
+              Node* mainMethod = new Node("PublicMainMethod","");
+              $$->children.push_back(mainMethod);
+              mainMethod->children.push_back($12);
+              mainMethod->children.push_back($15);
             };
 
 typeIdentifier: type identifier
@@ -81,19 +82,19 @@ typeIdentifiers:
                 };|
                 typeIdentifierList
                 {
-                  $$ = new Node("TypeIdentifiers", "");
+                  $$ = new Node("", "");
                   $$->children.push_back($1);
                 };
 
 typeIdentifierList:
                   typeIdentifier
                   {
-                    $$ = new Node("TypeIdentifierList", "");
+                    $$ = new Node("", "");
                     $$->children.push_back($1);
                   };|
                   typeIdentifierList COMMA typeIdentifier
                   {
-                    $$ = new Node("TypeIdentifierList", "");
+                    $$ = new Node("", "");
                     $$->children.push_back($1);
                     $$->children.push_back($3);
                   };
@@ -105,7 +106,7 @@ expressions:
                 };|
                 expressionList
                 {
-                $$ = new Node("Expressions", "");
+                $$ = new Node("", "");
                 $$->children.push_back($1);
               };
 
@@ -113,12 +114,12 @@ expressions:
 expressionList:
               expression
               {
-                $$ = new Node("ExpressionList", "");
+                $$ = new Node("", "");
                 $$->children.push_back($1);
               };|
               expressionList COMMA expression
               {
-                $$ = new Node("ExpressionList", "");
+                $$ = new Node("", "");
                 $$->children.push_back($1);
                 $$->children.push_back($3);
               };
@@ -128,19 +129,19 @@ classDeclaration: CLASS identifier extendsIdentifier LBRACE varDeclarations meth
                     $$ = new Node("ClassDeclaration", "");
                     $$->children.push_back($2);
                     $$->children.push_back($3);
-                    $3->children.push_back($5);
-                    $3->children.push_back($6);
+                    $$->children.push_back($5);
+                    $$->children.push_back($6);
                   };
 
 classDeclarationList:
                     classDeclaration
                     {
-                      $$ = new Node("ClassDeclarationList", "");
+                      $$ = new Node("", "");
                       $$->children.push_back($1);
                     };|
                     classDeclarationList classDeclaration
                     {
-                      $$ = new Node("ClassDeclarationList", "");
+                      $$ = new Node("", "");
                       $$->children.push_back($1);
                       $$->children.push_back($2);
                     };
@@ -152,7 +153,7 @@ classDeclarations:
                   };|
                   classDeclarationList
                   {
-                    $$ = new Node("ClassDeclarations", "");
+                    $$ = new Node("", "");
                     $$->children.push_back($1);
                   };
 
@@ -161,20 +162,23 @@ methodDeclaration:  PUBLIC type identifier LP typeIdentifiers RP LBRACE varDecla
                       $$ = new Node("MethodDeclaration", "");
                       $$->children.push_back($2);
                       $$->children.push_back($3);
-                      $3->children.push_back($5);
-                      $5->children.push_back($8);
-                      $5->children.push_back($9);
-                      $5->children.push_back($11);
+                      $$->children.push_back($5);
+                      $$->children.push_back($8);
+                      $$->children.push_back($9);
+                      /* return node */
+                      Node* ret = new Node($10,"");
+                      $$->children.push_back(ret);
+                      ret->children.push_back($11);
                     };
 
 methodDeclarationList:  methodDeclaration
                         {
-                          $$ = new Node("MethodDeclarationList", "");
+                          $$ = new Node("", "");
                           $$->children.push_back($1);
                         };|
                         methodDeclarationList methodDeclaration
                         {
-                          $$ = new Node("MethodDeclarationList", "");
+                          $$ = new Node("", "");
                           $$->children.push_back($1);
                           $$->children.push_back($2);
                         };
@@ -186,7 +190,7 @@ methodDeclarations:
                   };|
                   methodDeclarationList
                   {
-                    $$ = new Node("MethodDeclarations", "");
+                    $$ = new Node("", "");
                     $$->children.push_back($1);
                   };
 
@@ -209,7 +213,7 @@ varDeclarations:
                 }; |
                 varDeclarations varDeclaration
                 {
-                  $$ = new Node("VarDeclarations", "");
+                  $$ = new Node("", "");
                   $$->children.push_back($1);
                   $$->children.push_back($2);
                 };
@@ -225,10 +229,7 @@ varDeclaration: type identifier SEMI_C
 
 type: INT LBRACKET RBRACKET
       {
-        $$ = new Node("IntegerArrayType", "");
-        $$->children.push_back(new Node("Type",$1));
-        $$->children.push_back(new Node("Type",$2));
-        $$->children.push_back(new Node("Type",$3));
+        $$ = new Node("IntegerArrayType", "intArray");
       };|
       BOOLEAN
       {
@@ -252,18 +253,18 @@ statements:
             }; |
             statementList
             {
-              $$ = new Node("Statements", "");
+              $$ = new Node("", "");
               $$->children.push_back($1);
             };
 
 statementList:  statement
                 {
-                  $$ = new Node("StatementList", "");
+                  $$ = new Node("", "");
                   $$->children.push_back($1);
                 };|
                 statementList statement
                 {
-                  $$ = new Node("StatementList", "");
+                  $$ = new Node("", "");
                   $$->children.push_back($1);
                   $$->children.push_back($2);
                 };
@@ -275,31 +276,31 @@ statement:  LBRACE statements RBRACE
             };|
             IF  LP  expression RP statement ELSE statement
             {
-              $$ = new Node("Statement", "");
+              $$ = new Node("IF_ElseStatement", "");
               $$->children.push_back($3);
               $$->children.push_back($5);
               $$->children.push_back($7);
             };|
             WHILE LP  expression RP statement
             {
-              $$ = new Node("Statement", "");
+              $$ = new Node("WhileStatement", "");
               $$->children.push_back($3);
               $$->children.push_back($5);
             };|
             SOP LP  expression  RP  SEMI_C
             {
-              $$ = new Node("SystemOutPrint", "");
+              $$ = new Node("SystemOutPrintStatement", "");
               $$->children.push_back($3);
             };|
             identifier  ASSIGN  expression SEMI_C
             {
-              $$ = new Node("Statement", "");
+              $$ = new Node("AssignStatement", "");
               $$->children.push_back($1);
               $$->children.push_back($3);
             };|
             identifier LBRACKET expression RBRACKET ASSIGN expression SEMI_C
             {
-              $$ = new Node("Statement", "");
+              $$ = new Node("ArrayIndexAssignStatement", "");
               $$->children.push_back($1);
               $$->children.push_back($3);
               $$->children.push_back($6);
@@ -307,43 +308,43 @@ statement:  LBRACE statements RBRACE
 
 expression: expression AND expression
             {
-              $$ = new Node("Expression", "AndOp");
+              $$ = new Node("Expression", "AndOP");
               $$->children.push_back($1);
               $$->children.push_back($3);
             };|
             expression OR expression
             {
-              $$ = new Node("Expression", "OrOp");
+              $$ = new Node("Expression", "OrOP");
               $$->children.push_back($1);
               $$->children.push_back($3);
             };|
             expression LESSER expression
             {
-              $$ = new Node("Expression", "LesserOp");
+              $$ = new Node("Expression", "LesserOP");
               $$->children.push_back($1);
               $$->children.push_back($3);
             };|
             expression GREATER expression
             {
-              $$ = new Node("Expression", "GreaterOp");
+              $$ = new Node("Expression", "GreaterOP");
               $$->children.push_back($1);
               $$->children.push_back($3);
             };|
             expression EQUAL expression
             {
-              $$ = new Node("Expression", "AssignOp");
+              $$ = new Node("Expression", "EqualsOP");
               $$->children.push_back($1);
               $$->children.push_back($3);
             };|
             expression PLUSOP expression
             {
-              $$ = new Node("Expression", "AddOp");
+              $$ = new Node("Expression", "AddOP");
               $$->children.push_back($1);
               $$->children.push_back($3);
             };|
             expression MINUS expression
             {
-              $$ = new Node("Expression", "SubOp");
+              $$ = new Node("Expression", "SubOP");
               $$->children.push_back($1);
               $$->children.push_back($3);
             };|
@@ -355,7 +356,7 @@ expression: expression AND expression
             };|
             expression DIVOP expression
             {
-              $$ = new Node("Expression", "DivOp");
+              $$ = new Node("Expression", "DivOP");
               $$->children.push_back($1);
               $$->children.push_back($3);
             };|
@@ -372,7 +373,7 @@ expression: expression AND expression
             };|
             expression DOT identifier LP expressions RP
             {
-              $$ = new Node("Expression", "DotOp");
+              $$ = new Node("Expression", "DotOP");
               $$->children.push_back($1);
               $$->children.push_back($3);
               $$->children.push_back($5);
@@ -410,7 +411,7 @@ expression: expression AND expression
             };|
             NOT expression
             {
-              $$ = new Node("Expression", "NotOp");
+              $$ = new Node("Expression", "NotOP");
               $$->children.push_back($2);
             };|
             LP expression RP
